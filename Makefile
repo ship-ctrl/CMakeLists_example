@@ -55,7 +55,7 @@ glog: glog-submodule
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr/local \
 		-DBUILD_SHARED_LIBS=ON \
-		-DWITH_GFLAGS=OFF \
+		-DWITH_GFLAGS=ON \
 		-DWITH_UNWIND=ON
 	cd $(GLOG_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
 	cd $(GLOG_BUILD_DIR) && sudo $(MAKE) install
