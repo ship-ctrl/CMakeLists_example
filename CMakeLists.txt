@@ -19,6 +19,18 @@ increment_and_save_build(${CMAKE_SOURCE_DIR})
 # Read back the updated values for use in CMake
 read_version_from_file(${CMAKE_SOURCE_DIR})
 
+option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
+
+if(INCLUDE_GLOG)
+    if(EXISTS "${PROJECT_SOURCE_DIR}/glog")
+        add_subdirectory(glog)
+    endif(EXISTS "${PROJECT_SOURCE_DIR}/glog")
+    
+    #FetchContent_Declare( gflags  GIT_REPOSITORY https://github.com/gflags/gflags.git )
+    #FetchContent_Declare( glog  GIT_REPOSITORY https://github.com/google/glog.git )
+
+endif(INCLUDE_GLOG)
+
 
 configure_file( 
     ${CMAKE_SOURCE_DIR}/Version.h.in 
