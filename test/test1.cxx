@@ -11,7 +11,7 @@
 
 BOOST_AUTO_TEST_SUITE(ExampleTest)
 
-int example() {return 0;}
+inline int example() {return 0;}
 
 /// @brief test checking example() is runable
 /// @param  casename
