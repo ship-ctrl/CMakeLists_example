@@ -3,10 +3,10 @@
 all: glog libmodbus
 
 # Directories
-GLOG_DIR = glog
+GLOG_DIR ?= glog
 GLOG_BUILD_DIR = $(GLOG_DIR)/build
 
-MODBUS_DIR = libmodbus
+MODBUS_DIR ?= libmodbus
 MODBUS_BUILD_DIR = $(MODBUS_DIR)/build
 
 # Add both submodules
@@ -16,7 +16,7 @@ submodules: glog-submodule modbus-submodule
 # GLOG submodule
 .PHONY: glog-submodule
 glog-submodule:
-	@if [ ! -d "$(GLOG_DIR)/.git" ]; then \
+	@if [ ! -f "$(GLOG_DIR)/.git" ]; then \
 		echo "Adding glog submodule..."; \
 		git submodule add https://github.com/google/glog.git $(GLOG_DIR); \
 	else \
