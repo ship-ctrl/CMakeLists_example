@@ -41,7 +41,10 @@ endif(INCLUDE_GLOG)
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
 if(INCLUDE_GFLAGS)
-    FetchContent_Declare( gflags  GIT_REPOSITORY https://github.com/gflags/gflags.git )
+    FetchContent_Declare( gflags  
+    GIT_REPOSITORY https://github.com/gflags/gflags.git 
+    GIT_TAG        main  # You can change to specific version
+    )
     FetchContent_MakeAvailable(gflags)
     #find_package(gflags REQUIRED)
 endif(INCLUDE_GFLAGS)
