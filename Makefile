@@ -16,7 +16,7 @@ submodules: glog-submodule modbus-submodule
 # GLOG submodule
 .PHONY: glog-submodule
 glog-submodule:
-	@if [ ! -f "$(GLOG_DIR)/.git" ]; then \
+	@if [ ! -f "$(GLOG_DIR)/CMakeLists.txt" ]; then \
 		echo "Adding glog submodule..."; \
 		git submodule add https://github.com/google/glog.git $(GLOG_DIR); \
 	else \
