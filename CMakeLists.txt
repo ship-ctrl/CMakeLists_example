@@ -4,7 +4,7 @@ project(GenericProject VERSION 0.01.001)
 # Include the module
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(AutoVersion)
-#include(FetchContent)
+include(FetchContent)
 
 # Set the C++ standard to be used
 set(CMAKE_CXX_STANDARD 23)
@@ -23,82 +23,27 @@ read_version_from_file(${CMAKE_SOURCE_DIR})
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
 
 if(INCLUDE_GLOG)
-    #FetchContent_Declare( 
-    #glog
-    #GIT_REPOSITORY https://github.com/google/glog.git
+    FetchContent_Declare( 
+    glog
+    GIT_REPOSITORY https://github.com/google/glog.git
     #GIT_TAG        v0.6.0  # You can change to specific version
-    #)
-    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/glog/CMakeLists.txt)
-        message(STATUS "Updating glog submodule...")
-        execute_process(
-            COMMAND git submodule update --init --recursive glog
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE GIT_RESULT
-        )
-    else()
-        message(STATUS "Initializing glog submodule...")
-        execute_process(
-            COMMAND git submodule add https://github.com/google/glog.git
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE GIT_RESULT
-        )
-        #FetchContent_Declare( glog  GIT_REPOSITORY https://github.com/google/glog.git )
-    endif(EXISTS "${PROJECT_SOURCE_DIR}/glog")
-    
-    if(NOT GIT_RESULT EQUAL 0)
-        message(WARNING "Failed to initialize glog submodule. You may need to run: git submodule update --init --recursive")
-    endif()
-    execute_process(
-            COMMAND cmake -S glog -B glog/build && cd glog && sudo make install
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE CM_RESULT
     )
-    if(NOT CM_RESULT EQUAL 0)
-        message(WARNING "Failed to install glog submodule. You may need to run: cmake -S glog -B glog/build && cd glog && sudo make install")
-    endif()
+
     # Set glog options before fetching
-    #set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-    #set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
-    #set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
-    #FetchContent_MakeAvailable(glog)
-    find_package(glog REQUIRED)
+    set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+    set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
+    set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
+    FetchContent_MakeAvailable(glog)
+    #find_package(glog REQUIRED)
 endif(INCLUDE_GLOG)
 
 
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
 if(INCLUDE_GFLAGS)
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/gflags/CMakeLists.txt)
-        message(STATUS "Updating gflags submodule...")
-        execute_process(
-            COMMAND git submodule update --init --recursive gflags
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE GIT_RESULT
-        )
-    else()
-        message(STATUS "Initializing gflags submodule...")
-        execute_process(
-            COMMAND git submodule add https://github.com/gflags/gflags.git
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE GIT_RESULT
-        )
-        #FetchContent_Declare( gflags  GIT_REPOSITORY https://github.com/gflags/gflags.git )
-    endif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/gflags/CMakeLists.txt)
-    
-    if(NOT GIT_RESULT EQUAL 0)
-        message(WARNING "Failed to initialize gflags submodule. You may need to run: git submodule update --init --recursive")
-    endif()
-    execute_process(
-            COMMAND cmake -S gflags -B gflags/build && cd gflags && sudo make install
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            RESULT_VARIABLE CM_RESULT
-    )
-    if(NOT CM_RESULT EQUAL 0)
-        message(WARNING "Failed to install gflags submodule. You may need to run: cmake -S gflags -B gflags/build && cd gflags && sudo make install")
-    endif()
-    
-    #FetchContent_MakeAvailable(gflags)
-    find_package(gflags REQUIRED)
+    FetchContent_Declare( gflags  GIT_REPOSITORY https://github.com/gflags/gflags.git )
+    FetchContent_MakeAvailable(gflags)
+    #find_package(gflags REQUIRED)
 endif(INCLUDE_GFLAGS)
 
 configure_file( 
