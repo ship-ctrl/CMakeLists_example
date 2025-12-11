@@ -55,8 +55,8 @@ jobs:
           cmake -S . -B ${{github.workspace}}/build \
                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                  -D RUNNER_FETCH_ALL=OFF \
-                 -D INCLUDE_GLOG=ON \
-                 -D INCLUDE_GFLAGS=ON \
+                 -D INCLUDE_GLOG=OFF \
+                 -D INCLUDE_GFLAGS=OFF \
                  -D BUILD_TEST_lo=ON
 
     - name: Build
