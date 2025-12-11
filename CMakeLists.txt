@@ -132,12 +132,13 @@ endif(Enable_Licensing)
 
 if(NOT TESTONLY)
     add_executable(example src/main.cxx ${Mbus_INCLUDES} ${YAML_CPP_LIBRARIES} ${EXTRA_INCLUDES})
-    target_link_libraries(example 
-    glog::glog 
-    gflags::gflags
-    #PRIVATE libmodbus.so 
-    ${licLib} 
-    ${catkin_LIBRARIES})
+    target_link_libraries( example
+        glog::glog 
+        gflags::gflags
+        #PRIVATE libmodbus.so 
+        ${licLib} 
+        ${catkin_LIBRARIES}
+    )
     
     # Add post-build command to the target
     add_custom_command(TARGET example POST_BUILD

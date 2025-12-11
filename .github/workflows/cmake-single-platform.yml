@@ -22,9 +22,31 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: submodules
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: cpp
+    
+    - name: Setup Dependencies
       run: |
-          git submodule update --remote --recursive
+        sudo apt-get update
+        DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-suggests --no-install-recommends \
+          g++ \
+          cmake \
+          gcovr \
+          libgflags-dev \
+          libgmock-dev \
+          libgtest-dev \
+          libunwind-dev \
+          libboost-dev \
+          ninja-build
+
+    - name: Initialize submodules before CMake
+      run: |
+        # This ensures submodules are ready before CMake runs
+        git submodule update --init --recursive
+        # If submodules have nested submodules
+        git submodule foreach --recursive 'git submodule update --init'
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
