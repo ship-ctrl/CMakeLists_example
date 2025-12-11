@@ -20,11 +20,10 @@ increment_and_save_build(${CMAKE_SOURCE_DIR})
 # Read back the updated values for use in CMake
 read_version_from_file(${CMAKE_SOURCE_DIR})
 
-option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" OFF)
+option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" ON)
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
 
 if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
-    message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     FetchContent_Declare( 
     glog
     GIT_REPOSITORY https://github.com/google/glog.git
@@ -37,19 +36,20 @@ if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
     set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
     FetchContent_MakeAvailable(glog)
 else()
+    message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     find_package(glog REQUIRED)
 endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
 
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
 if(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
-    message (STATUS "gflags installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     FetchContent_Declare( gflags  
     GIT_REPOSITORY https://github.com/gflags/gflags.git 
     GIT_TAG        main  # You can change to specific version
     )
     FetchContent_MakeAvailable(gflags)
 else()
+    message (STATUS "gflags installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     find_package(gflags REQUIRED)
 endif(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
 
