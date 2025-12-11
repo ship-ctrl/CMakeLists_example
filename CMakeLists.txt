@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.22) # feel free to downgrade on build errors but it's better be 3.22
 project(GenericProject VERSION 0.01.001)
 
-cmake_policy(CMP0156 NEW) #deduplicate lib
-cmake_policy(CMP0179 NEW) #use first occurrence
+cmake_policy(SET CMP0156 NEW) #deduplicate lib
+cmake_policy(SET CMP0179 NEW) #use first occurrence
 
 # Include the module
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -25,36 +25,44 @@ read_version_from_file(${CMAKE_SOURCE_DIR})
 
 option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" OFF)
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
-
-if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
-    FetchContent_Declare( 
-    glog
-    GIT_REPOSITORY https://github.com/google/glog.git
-    #GIT_TAG        v0.6.0  # You can change to specific version
-    )
-
-    # Set glog options before fetching
-    set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-    set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
-    set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
-    FetchContent_MakeAvailable(glog)
-else()
-    message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
-    find_package(glog REQUIRED)
-endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
-
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
 if(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
-    FetchContent_Declare( gflags  
-    GIT_REPOSITORY https://github.com/gflags/gflags.git 
-    GIT_TAG        main  # You can change to specific version
-    )
-    FetchContent_MakeAvailable(gflags)
+    if(EXISTS "${CMAKE_SOURCE_DIR}/gflags")
+        add_subdirectory(gflags)
+    else()
+        FetchContent_Declare( 
+            gflags  
+            GIT_REPOSITORY https://github.com/gflags/gflags.git 
+            GIT_TAG        main  # You can change to specific version
+        )
+        FetchContent_MakeAvailable(gflags)
+    endif(EXISTS "${CMAKE_SOURCE_DIR}/gflags")
 else()
     message (STATUS "gflags installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     find_package(gflags REQUIRED)
 endif(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
+
+if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
+    if(EXISTS "${CMAKE_SOURCE_DIR}/glog")
+        add_subdirectory(glog)
+    else()
+        FetchContent_Declare( 
+            glog
+            GIT_REPOSITORY https://github.com/google/glog.git
+            #GIT_TAG        v0.6.0  # You can change to specific version
+        )
+
+        # Set glog options before fetching
+        set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
+        set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
+        set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
+        FetchContent_MakeAvailable(glog)
+    endif(EXISTS "${CMAKE_SOURCE_DIR}/glog")
+else()
+    message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
+    find_package(glog REQUIRED)
+endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
 
 configure_file( 
     ${CMAKE_SOURCE_DIR}/Version.h.in 
