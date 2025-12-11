@@ -81,7 +81,7 @@ if(BUILD_TESTING)
     if(Boost_FOUND)
         message ("Boost found")
     else()
-        message (FATAL_ERROR "Cannot find Boost")
+        #message (FATAL_ERROR "Cannot find Boost")
     endif(Boost_FOUND)
 endif(BUILD_TESTING)
 
