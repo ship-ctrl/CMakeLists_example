@@ -56,7 +56,7 @@ configure_file(
 
 #find_package(Threads REQUIRED)
 if(BUILD_TESTING)
-    find_package( Boost 1.7 COMPONENTS system REQUIRED CONFIG)
+    find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
     enable_testing()
     add_subdirectory(test)
     if(Boost_FOUND)

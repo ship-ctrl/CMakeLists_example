@@ -2,15 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(tests)
 
 include(Exclusions)
-
-# Enable testing
-enable_testing()
-
-cmake_minimum_required(VERSION 3.20)
-project(tests)
-
-include(Exclusions)
-
+include(FetchContent)
 # Enable testing
 enable_testing()
 
@@ -51,7 +43,18 @@ set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall -g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -O3 -flto")
 
 find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
-#ind_package (yaml-cpp  REQUIRED CONFIG)
+if(Boost_FOUND)
+        message ("Boost found")
+    else()
+        #message (FATAL_ERROR "Cannot find Boost")
+        FetchContent_Declare(
+            boost
+            GIT_REPOSITORY https://github.com/boostorg/boost.git
+            #GIT_TAG boost-1.85.0
+        )
+        FetchContent_MakeAvailable(boost)
+endif(Boost_FOUND)
+#find_package (yaml-cpp  REQUIRED CONFIG)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
