@@ -50,7 +50,7 @@ modbus-submodule:
 .PHONY: update-submodules
 update-submodules:
 	@echo "Updating all submodules..."
-	git submodule update --remote --merge
+	git submodule update --remote --merge --recursive
 
 glog-configure: glog-submodule
 	@echo "Configure glog to $(GLOG_BUILD_DIR) ..."
@@ -81,7 +81,7 @@ libmodbus: modbus-submodule
 	autoreconf -f -i 2>/dev/null || autoreconf -i
 	@mkdir -p $(MODBUS_BUILD_DIR)
 	cd $(MODBUS_BUILD_DIR) && \
-	../configure \
+	../../libmodbus/configure \
 		--prefix=/usr/local \
 		--enable-shared \
 		--disable-static
