@@ -2,6 +2,7 @@
 .PHONY: all
 all: check-deps  gflags glog libmodbus
 
+mkfile_path := $(PWD)
 # Directories
 GLOG_DIR ?= glog
 GLOG_BUILD_DIR = build/$(GLOG_DIR)
