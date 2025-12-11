@@ -57,7 +57,7 @@ jobs:
                  -D RUNNER_FETCH_ALL=ON \
                  -D INCLUDE_GLOG=ON \
                  -D INCLUDE_GFLAGS=ON \
-                 -D BUILD_TESTING=ON
+                 -D BUILD_TEST_lo=ON
 
     - name: Build
       # Build your program with the given configuration
