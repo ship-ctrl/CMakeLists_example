@@ -1,17 +1,23 @@
 # Default target - builds both libraries
 .PHONY: all
-all: glog libmodbus
+all: check-deps  gflags glog libmodbus
 
 # Directories
 GLOG_DIR ?= glog
-GLOG_BUILD_DIR = $(GLOG_DIR)/build
+GLOG_BUILD_DIR = build/$(GLOG_DIR)
 
 MODBUS_DIR ?= libmodbus
-MODBUS_BUILD_DIR = $(MODBUS_DIR)/build
+MODBUS_BUILD_DIR = build/$(MODBUS_DIR)
+
+GFLAGS_DIR ?= gflags
+GFLAGS_BUILD_DIR = build/$(GFLAGS_DIR)
+
+mkfile_path := $(PWD)
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
 # Add both submodules
 .PHONY: submodules
-submodules: glog-submodule modbus-submodule
+submodules: glog-submodule gflags-submodule modbus-submodule update-submodules
 
 # GLOG submodule
 .PHONY: glog-submodule
@@ -45,18 +51,22 @@ update-submodules:
 	@echo "Updating all submodules..."
 	git submodule update --remote --merge
 
+glog-configure: glog-submodule
+	@echo "Configure glog to $(GLOG_BUILD_DIR) ..."
+	@cd $(mkfile_path) 
+	@mkdir -p $(GLOG_BUILD_DIR)
+	cd $(GLOG_DIR)  && \
+	cmake .. --trace \
+		-G "Unix Makefiles" \
+		-B $(GLOG_BUILD_DIR) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DBUILD_SHARED_LIBS=ON 
+
 # Build and install glog (CMake-based)
 .PHONY: glog
-glog: glog-submodule
+glog: glog-submodule glog-configure
 	@echo "Building and installing glog..."
-	@mkdir -p $(GLOG_BUILD_DIR)
-	cd $(GLOG_BUILD_DIR) && \
-	cmake .. \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_INSTALL_PREFIX=/usr/local \
-		-DBUILD_SHARED_LIBS=ON \
-		-DWITH_GFLAGS=ON \
-		-DWITH_UNWIND=ON
+	cd $(mkfile_path) 
 	cd $(GLOG_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
 	cd $(GLOG_BUILD_DIR) && sudo $(MAKE) install
 	@echo "Glog installed successfully"
@@ -65,6 +75,7 @@ glog: glog-submodule
 .PHONY: libmodbus
 libmodbus: modbus-submodule
 	@echo "Building and installing libmodbus..."
+	@cd $(mkfile_path) 
 	cd $(MODBUS_DIR) && \
 	autoreconf -f -i 2>/dev/null || autoreconf -i
 	@mkdir -p $(MODBUS_BUILD_DIR)
@@ -175,6 +186,35 @@ check-deps:
 	@command -v make >/dev/null 2>&1 || echo "make is not installed"
 	@command -v gcc >/dev/null 2>&1 || echo "gcc is not installed"
 	@echo "Dependency check complete"
+	@export CC=/usr/bin/clang
+	@export CXX=/usr/bin/clang++
+
+gflags-submodule:
+	@if [ ! -f "$(GFLAGS_DIR)/CMakeLists.txt" ]; then \
+		echo "Adding gflags submodule..."; \
+		git submodule add https://github.com/gflags/gflags.git $(GLOG_DIR); \
+	else \
+		echo "gflags submodule already exists"; \
+		git submodule update --init --recursive $(GFLAGS_DIR); \
+	fi
+
+gflags-configure:
+	@echo "Configure gflags to $(GFLAGS_BUILD_DIR) ..."
+	@cd $(mkfile_path) 
+	@mkdir -p $(GFLAGS_BUILD_DIR)
+	cd $(GFLAGS_DIR)  && \
+	cmake .. --trace \
+		-G "Unix Makefiles" \
+		-B $(GFLAGS_BUILD_DIR) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DBUILD_SHARED_LIBS=ON 
+
+gflags: gflags-submodule gflags-configure
+	@echo "Building and installing gflags..."
+	@cd $(mkfile_path) 
+	cd $(GFLAGS_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
+	cd $(GFLAGS_BUILD_DIR) && sudo $(MAKE) install
+	@echo "gflags installed successfully"
 
 # Help target
 .PHONY: help
