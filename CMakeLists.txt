@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.22) # feel free to downgrade on build errors but it's better be 3.22
 project(GenericProject VERSION 0.01.001)
 
-cmake_policy(CMP0156 NEW)
+cmake_policy(CMP0156 NEW) #deduplicate lib
+cmake_policy(CMP0179 NEW) #use first occurrence
 
 # Include the module
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
