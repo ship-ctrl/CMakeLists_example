@@ -42,7 +42,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall -g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "-Wall -O3 -flto")
 
-find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
+#find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
 if(Boost_FOUND)
         message ("Boost found")
     else()
