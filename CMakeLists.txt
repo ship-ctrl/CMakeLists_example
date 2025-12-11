@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16) # feel free to downgrade on build errors but it's better be 3.22
+cmake_minimum_required(VERSION 3.22) # feel free to downgrade on build errors but it's better be 3.22
 project(GenericProject VERSION 0.01.001)
 
 # Include the module
