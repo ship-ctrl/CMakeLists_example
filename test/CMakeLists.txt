@@ -15,15 +15,18 @@ set(TEST_DIR ${TEST_SOURCE_DIR})
 set(TEST_EXTENSIONS "cxx;c;cpp" CACHE STRING "File extensions to treat as tests")
 #message(STATUS "testdir ${TEST_DIR}")
 
-option(EXCLUDE_TESTS "Tests by source files" 
-    "main"           # Exclude files named main.cpp, main.c, etc.
-    "utils"          # Exclude utils.cpp
-    "common"         # Exclude common.cpp
-    )
+#option(EXCLUDE_TESTS "Tests by source files" 
+#    "main"           # Exclude files named main.cpp, main.c, etc.
+#    "utils"          # Exclude utils.cpp
+#    "common"         # Exclude common.cpp
+#    )
 
 # Configure file exclusions (modify this list as needed)
 set(EXCLUDED_FILES
-    ${EXCLUDE_TESTS}
+    #${EXCLUDE_TESTS}
+    "main"           # Exclude files named main.cpp, main.c, etc.
+    "utils"          # Exclude utils.cpp
+    "common"         # Exclude common.cpp
     # Add more patterns here
     CACHE STRING "File name patterns to exclude (without extension)"
 )
