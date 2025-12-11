@@ -66,11 +66,11 @@ option(INCLUDE_BOOST "fetch boost and link to main target" OFF)
 if(BUILD_TESTING)
     if(INCLUDE_BOOST OR RUNNER_FETCH_ALL)
         FetchContent_Declare(
-            boost
+            Boost
             GIT_REPOSITORY https://github.com/boostorg/boost.git
             #GIT_TAG boost-1.85.0
         )
-        FetchContent_MakeAvailable(boost)
+        FetchContent_MakeAvailable(Boost)
     else()
         message (STATUS "Boost found or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
         find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
