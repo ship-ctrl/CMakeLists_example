@@ -22,23 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Build Boost
-      id: build-boost
-      uses: egor-tensin/build-boost@v1
-      with:
-        version: '1.80.0'
-        libraries: 'unit_test_framework'  # Specify the exact libraries you need
-        toolset: 'clang'      # Optional: 'msvc', 'clang', 'mingw'
-        platform: 'x64'     # Optional: 'x86' or 'x64'
-        configuration: 'Release' # Optional: 'Release' or 'Debug'
-        #static: '1'         # Set to '1' for static libraries, omit for shared
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -B ${{github.workspace}}/build \
                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                 -D BOOST_ROOT="${{ steps.build-boost.outputs.root }}" \
-                 -D BOOST_LIBRARYDIR="${{ steps.build-boost.outputs.librarydir }}" \
+                 -D RUNNER_FETCH_BOOST
                  -D INCLUDE_GLOG=ON \
                  -D INCLUDE_GFLAGS=ON \ 
                  -D BUILD_TESTING=TRUE 

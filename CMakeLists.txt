@@ -37,7 +37,6 @@ if(INCLUDE_GLOG)
     #find_package(glog REQUIRED)
 endif(INCLUDE_GLOG)
 
-
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
 if(INCLUDE_GFLAGS)
@@ -56,7 +55,17 @@ configure_file(
 
 #find_package(Threads REQUIRED)
 if(BUILD_TESTING)
-    find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
+    if(RUNNER_FETCH_BOOST)
+        FetchContent_Declare(
+            boost
+            GIT_REPOSITORY https://github.com/boostorg/boost.git
+            #GIT_TAG boost-1.85.0
+        )
+        FetchContent_MakeAvailable(boost)
+    else()
+        find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
+    endif(RUNNER_FETCH_BOOST)
+    
     enable_testing()
     add_subdirectory(test)
     if(Boost_FOUND)
