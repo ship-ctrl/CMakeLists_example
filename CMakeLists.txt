@@ -44,7 +44,7 @@ else()
 endif(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
 
 if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/glog")
+    if(EXISTS "${CMAKE_SOURCE_DIR}/glog/CMakeLists.txt")
         add_subdirectory(glog)
     else()
         FetchContent_Declare( 
