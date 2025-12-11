@@ -39,6 +39,7 @@ jobs:
           libgtest-dev \
           libunwind-dev \
           libboost-dev \
+          libgoogle-glog-dev \
           ninja-build
 
     - name: Initialize submodules before CMake
