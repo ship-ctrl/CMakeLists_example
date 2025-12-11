@@ -63,6 +63,7 @@ if(BUILD_TESTING)
         )
         FetchContent_MakeAvailable(boost)
     else()
+        message ("Boost found or RUNNER_FETCH_BOOST = ${RUNNER_FETCH_BOOST}")
         find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
     endif(RUNNER_FETCH_BOOST)
     
