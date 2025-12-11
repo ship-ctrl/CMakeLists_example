@@ -27,8 +27,8 @@ jobs:
       uses: egor-tensin/build-boost@v1
       with:
         version: '1.80.0'
-        libraries: 'filesystem program_options system'  # Specify the exact libraries you need
-        toolset: 'gcc'      # Optional: 'msvc', 'clang', 'mingw'
+        libraries: 'unit_test_framework'  # Specify the exact libraries you need
+        toolset: 'clang'      # Optional: 'msvc', 'clang', 'mingw'
         platform: 'x64'     # Optional: 'x86' or 'x64'
         configuration: 'Release' # Optional: 'Release' or 'Debug'
         #static: '1'         # Set to '1' for static libraries, omit for shared
