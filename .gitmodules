@@ -4,6 +4,3 @@
 [submodule "glog"]
 	path = glog
 	url = https://github.com/google/glog.git
-[submodule "libmodbus"]
-	path = libmodbus
-	url = https://github.com/stephane/libmodbus.git
