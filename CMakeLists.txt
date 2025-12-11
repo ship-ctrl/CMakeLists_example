@@ -54,6 +54,10 @@ configure_file(
     )
 
 #find_package(Threads REQUIRED)
+
+option(BUILD_TESTING "Build the testing tree" OFF)
+option(RUNNER_FETCH_BOOST "fetching boost" OFF)
+
 if(BUILD_TESTING)
     if(RUNNER_FETCH_BOOST)
         FetchContent_Declare(

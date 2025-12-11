@@ -27,10 +27,10 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -B ${{github.workspace}}/build \
                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                 -D RUNNER_FETCH_BOOST=TRUE
+                 -D RUNNER_FETCH_BOOST=ON \
                  -D INCLUDE_GLOG=ON \
                  -D INCLUDE_GFLAGS=ON \ 
-                 -D BUILD_TESTING=TRUE 
+                 -D BUILD_TESTING=ON 
 
     - name: Build
       # Build your program with the given configuration
