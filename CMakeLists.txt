@@ -24,6 +24,7 @@ option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" OFF)
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
 
 if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
+    message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     FetchContent_Declare( 
     glog
     GIT_REPOSITORY https://github.com/google/glog.git
@@ -41,6 +42,7 @@ endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
 if(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
+    message (STATUS "gflags installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     FetchContent_Declare( gflags  
     GIT_REPOSITORY https://github.com/gflags/gflags.git 
     GIT_TAG        main  # You can change to specific version
@@ -68,7 +70,7 @@ if(BUILD_TESTING)
         )
         FetchContent_MakeAvailable(boost)
     else()
-        message ("Boost found or RUNNER_FETCH_BOOST = ${RUNNER_FETCH_BOOST}")
+        message (STATUS "Boost found or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
         find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
     endif(INCLUDE_BOOST OR RUNNER_FETCH_ALL)
     
