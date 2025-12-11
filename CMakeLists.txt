@@ -20,9 +20,10 @@ increment_and_save_build(${CMAKE_SOURCE_DIR})
 # Read back the updated values for use in CMake
 read_version_from_file(${CMAKE_SOURCE_DIR})
 
+option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" OFF)
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
 
-if(INCLUDE_GLOG)
+if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
     FetchContent_Declare( 
     glog
     GIT_REPOSITORY https://github.com/google/glog.git
@@ -35,18 +36,18 @@ if(INCLUDE_GLOG)
     set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
     FetchContent_MakeAvailable(glog)
     #find_package(glog REQUIRED)
-endif(INCLUDE_GLOG)
+endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
 
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
-if(INCLUDE_GFLAGS)
+if(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
     FetchContent_Declare( gflags  
     GIT_REPOSITORY https://github.com/gflags/gflags.git 
     GIT_TAG        main  # You can change to specific version
     )
     FetchContent_MakeAvailable(gflags)
     #find_package(gflags REQUIRED)
-endif(INCLUDE_GFLAGS)
+endif(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
 
 configure_file( 
     ${CMAKE_SOURCE_DIR}/Version.h.in 
@@ -56,10 +57,10 @@ configure_file(
 #find_package(Threads REQUIRED)
 
 option(BUILD_TESTING "Build the testing tree" OFF)
-option(RUNNER_FETCH_BOOST "fetching boost" OFF)
+option(INCLUDE_BOOST "fetch boost and link to main target" OFF)
 
 if(BUILD_TESTING)
-    if(RUNNER_FETCH_BOOST)
+    if(INCLUDE_BOOST OR RUNNER_FETCH_ALL)
         FetchContent_Declare(
             boost
             GIT_REPOSITORY https://github.com/boostorg/boost.git
@@ -69,7 +70,7 @@ if(BUILD_TESTING)
     else()
         message ("Boost found or RUNNER_FETCH_BOOST = ${RUNNER_FETCH_BOOST}")
         find_package (Boost COMPONENTS unit_test_framework REQUIRED CONFIG)
-    endif(RUNNER_FETCH_BOOST)
+    endif(INCLUDE_BOOST OR RUNNER_FETCH_ALL)
     
     enable_testing()
     add_subdirectory(test)
