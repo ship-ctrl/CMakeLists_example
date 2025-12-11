@@ -58,7 +58,7 @@ if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
         set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
         set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
         FetchContent_MakeAvailable(glog)
-    endif(EXISTS "${CMAKE_SOURCE_DIR}/glog")
+    endif(EXISTS "${CMAKE_SOURCE_DIR}/glog/CMakeLists.txt")
 else()
     message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
     find_package(glog REQUIRED)
@@ -71,10 +71,10 @@ configure_file(
 
 #find_package(Threads REQUIRED)
 
-option(BUILD_TESTING "Build the testing tree" OFF)
+option(BUILD_TEST_lo "Build the testing tree" OFF)
 option(INCLUDE_BOOST "fetch boost and link to main target" OFF)
 
-if(BUILD_TESTING)
+if(BUILD_TEST_lo)
     if(INCLUDE_BOOST OR RUNNER_FETCH_ALL)
         FetchContent_Declare(
             Boost
@@ -96,7 +96,7 @@ if(BUILD_TESTING)
     else()
         #message (FATAL_ERROR "Cannot find Boost")
     endif(Boost_FOUND)
-endif(BUILD_TESTING)
+endif(BUILD_TEST_lo)
 
 message(STATUS "==========================================")
 message(STATUS "Project: ${PROJECT_NAME}")
