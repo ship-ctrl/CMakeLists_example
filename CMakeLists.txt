@@ -36,7 +36,8 @@ if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
     set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
     set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
     FetchContent_MakeAvailable(glog)
-    #find_package(glog REQUIRED)
+else()
+    find_package(glog REQUIRED)
 endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
 
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
@@ -48,7 +49,8 @@ if(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
     GIT_TAG        main  # You can change to specific version
     )
     FetchContent_MakeAvailable(gflags)
-    #find_package(gflags REQUIRED)
+else()
+    find_package(gflags REQUIRED)
 endif(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
 
 configure_file( 
