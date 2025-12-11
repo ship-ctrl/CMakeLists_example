@@ -20,7 +20,7 @@ increment_and_save_build(${CMAKE_SOURCE_DIR})
 # Read back the updated values for use in CMake
 read_version_from_file(${CMAKE_SOURCE_DIR})
 
-option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" ON)
+option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" OFF)
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
 
 if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
