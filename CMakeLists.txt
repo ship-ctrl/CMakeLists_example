@@ -27,44 +27,30 @@ option(RUNNER_FETCH_ALL "fetching deps via fetchcontent" OFF)
 option(INCLUDE_GLOG "fetch glog and link to main target" OFF)
 option(INCLUDE_GFLAGS "fetch gflags and link to main target" OFF)
 
-if(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/gflags/CMakeLists.txt")
-        add_subdirectory(gflags)
-    else()
-        FetchContent_Declare( 
-            gflags  
-            GIT_REPOSITORY https://github.com/gflags/gflags.git 
-            GIT_TAG        main  # You can change to specific version
-        )
-        FetchContent_MakeAvailable(gflags)
-    endif(EXISTS "${CMAKE_SOURCE_DIR}/gflags/CMakeLists.txt")
-else()
-    message (STATUS "gflags installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
-    if(NOT TARGET gflags::gflags)
-        find_package(gflags REQUIRED)
-    endif()
-endif(INCLUDE_GFLAGS OR RUNNER_FETCH_ALL)
+# Choose one method to provide both glog and gflags: either FetchContent or find_package
 
-if(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/glog/CMakeLists.txt")
-        add_subdirectory(glog)
-    else()
-        FetchContent_Declare( 
-            glog
-            GIT_REPOSITORY https://github.com/google/glog.git
-            #GIT_TAG        v0.6.0  # You can change to specific version
-        )
+option(FORCE_FETCH_DEPS "Force fetching dependencies (gflags/glog) via FetchContent" OFF)
 
-        # Set glog options before fetching
-        set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries")
-        set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Set to ON if you need gflags
-        set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
-        FetchContent_MakeAvailable(glog)
-    endif(EXISTS "${CMAKE_SOURCE_DIR}/glog/CMakeLists.txt")
+if(FORCE_FETCH_DEPS)
+    # FetchContent for both gflags and glog
+    FetchContent_Declare(
+        gflags
+        GIT_REPOSITORY https://github.com/gflags/gflags.git
+        GIT_TAG main
+    )
+    FetchContent_Declare(
+        glog
+        GIT_REPOSITORY https://github.com/google/glog.git
+        # GIT_TAG v0.6.0
+    )
+    set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+    set(WITH_GFLAGS OFF CACHE BOOL "Build with gflags")  # Or ON if glog needs it
+    set(WITH_UNWIND OFF CACHE BOOL "Build with unwind support")
+    FetchContent_MakeAvailable(gflags glog)
 else()
-    message (STATUS "glog installing or RUNNER_FETCH_ALL = ${RUNNER_FETCH_ALL}")
+    find_package(gflags REQUIRED)
     find_package(glog REQUIRED)
-endif(INCLUDE_GLOG OR RUNNER_FETCH_ALL)
+endif()
 
 configure_file( 
     ${CMAKE_SOURCE_DIR}/Version.h.in 
