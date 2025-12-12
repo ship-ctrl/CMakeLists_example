@@ -38,7 +38,7 @@ jobs:
           libgmock-dev \
           libgtest-dev \
           libunwind-dev \
-          libboost-dev \
+          libboost-all-dev \
           libgoogle-glog-dev \
           ninja-build
 
@@ -57,7 +57,7 @@ jobs:
                  -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
                  -D RUNNER_FETCH_ALL=OFF \
                  -D INCLUDE_GLOG=OFF \
-                 -D INCLUDE_GFLAGS=OFF \
+                 -D INCLUDE_GFLAGS=ON \
                  -D BUILD_TEST_lo=ON
 
     - name: Build
