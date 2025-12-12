@@ -58,6 +58,8 @@ jobs:
                  -D RUNNER_FETCH_ALL=OFF \
                  -D INCLUDE_GLOG=OFF \
                  -D INCLUDE_GFLAGS=ON \
+                 -D INSTALL_SHARED_LIBS=ON \
+                 -D INSTALL_STATIC_LIBS=ON \
                  -D BUILD_TEST_lo=ON
 
     - name: Build
