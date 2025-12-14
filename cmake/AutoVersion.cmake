@@ -3,17 +3,6 @@ set(AV_VERSION "0.1.0")
 # Simple build success handler
 string(TIMESTAMP NOW)
 
-#set(verfile "/")
-
-# if(DIR)
-# 	cmake_path(
-#         ABSOLUTE_PATH ${DIR} 
-#         #BASE_DIRECTORY ${} 
-#         NORMALIZE
-#         OUTPUT_VARIABLE ${DIR}
-#         )
-# endif(DIR)
-
 # Function to read version from file
 function(read_version_from_file dir)
     if(EXISTS ${VERSION_FILE})
@@ -77,7 +66,7 @@ function(increment_and_save_min_ver dir)
     # Increment values
     #math(EXPR NEW_BUILD_NUMBER "${BUILD_NUMBER} + 1")
     math(EXPR NEW_MINOR_VERSION "${MINOR_VERSION} + 1")
-    message("see ${VERSION_FILE}")
+    #message("see ${VERSION_FILE}")
     # Write to file
     file(WRITE ${VERSION_FILE}
         "BUILD_NUMBER=${BUILD_NUMBER}\n"
