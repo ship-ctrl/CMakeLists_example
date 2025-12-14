@@ -127,7 +127,7 @@ if(NOT TESTONLY)
         ${licLib} 
         ${catkin_LIBRARIES}
     )
-message(STATUS " cm dir IS ${CMAKE_CURRENT_SOURCE_DIR}")
+
     # Add post-build command to the target
     add_custom_command(TARGET example POST_BUILD
         COMMAND ${CMAKE_COMMAND} 
