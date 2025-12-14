@@ -114,6 +114,9 @@ endif()
 
 # Add post-build command to the target
 # TODO find list targets add here
+
+message(STATUS " cm cdir IS ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS " cm dir IS ${CMAKE_SOURCE_DIR}")
 add_custom_command(TARGET ${CREATED_TESTS} POST_BUILD
     COMMAND ${CMAKE_COMMAND} 
         -DACT=1

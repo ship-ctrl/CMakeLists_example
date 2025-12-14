@@ -5,7 +5,7 @@ cmake_policy(SET CMP0156 NEW) #deduplicate lib
 cmake_policy(SET CMP0179 NEW) #use first occurrence
 
 # Include the module
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(AutoVersion)
 include(FetchContent)
 
@@ -122,15 +122,17 @@ if(NOT TESTONLY)
     add_executable(example src/main.cxx ${Mbus_INCLUDES} ${YAML_CPP_LIBRARIES} ${EXTRA_INCLUDES})
     target_link_libraries( example
         glog::glog 
-        gflags::gflags
+        gflags
         #PRIVATE libmodbus.so 
         ${licLib} 
         ${catkin_LIBRARIES}
     )
-    
+message(STATUS " cm dir IS ${CMAKE_CURRENT_SOURCE_DIR}")
     # Add post-build command to the target
     add_custom_command(TARGET example POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/IncreaseMinor.cmake
+        COMMAND ${CMAKE_COMMAND} 
+        -DDIR=${CMAKE_SOURCE_DIR}
+        -P ${CMAKE_SOURCE_DIR}/cmake/IncreaseMinor.cmake
         COMMENT "Updating build information..."
         VERBATIM
     )
