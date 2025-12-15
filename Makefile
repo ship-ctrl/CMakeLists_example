@@ -2,6 +2,9 @@
 .PHONY: all
 all: check-deps  gflags glog libmodbus
 
+# Detect number of CPU cores for parallel build
+NPROC := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+
 mkfile_path := $(PWD)
 # Directories
 GLOG_DIR ?= glog
@@ -91,67 +94,6 @@ libmodbus: modbus-submodule
 
 # Local installations (no sudo required)
 
-.PHONY: glog-local
-glog-local: glog-submodule
-	@echo "Building and installing glog locally..."
-	@mkdir -p $(GLOG_BUILD_DIR)
-	cd $(GLOG_BUILD_DIR) && \
-	cmake .. \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_INSTALL_PREFIX=$$(pwd)/install \
-		-DBUILD_SHARED_LIBS=ON \
-		-DWITH_GFLAGS=OFF \
-		-DWITH_UNWIND=ON
-	cd $(GLOG_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
-	cd $(GLOG_BUILD_DIR) && $(MAKE) install
-	@echo "Glog installed to: $(GLOG_BUILD_DIR)/install"
-
-.PHONY: libmodbus-local
-libmodbus-local: modbus-submodule
-	@echo "Building and installing libmodbus locally..."
-	cd $(MODBUS_DIR) && \
-	autoreconf -f -i 2>/dev/null || autoreconf -i
-	@mkdir -p $(MODBUS_BUILD_DIR)
-	cd $(MODBUS_BUILD_DIR) && \
-	../configure \
-		--prefix=$$(pwd)/install \
-		--enable-shared \
-		--disable-static
-	cd $(MODBUS_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
-	cd $(MODBUS_BUILD_DIR) && $(MAKE) install
-	@echo "Libmodbus installed to: $(MODBUS_BUILD_DIR)/install"
-
-# Combined local installation
-.PHONY: local
-local: glog-local libmodbus-local
-
-# Development mode (with debugging symbols)
-.PHONY: glog-dev
-glog-dev: glog-submodule
-	@mkdir -p $(GLOG_BUILD_DIR)
-	cd $(GLOG_BUILD_DIR) && \
-	cmake .. \
-		-DCMAKE_BUILD_TYPE=Debug \
-		-DCMAKE_INSTALL_PREFIX=/usr/local \
-		-DBUILD_SHARED_LIBS=ON \
-		-DWITH_GFLAGS=OFF \
-		-DWITH_UNWIND=ON
-	cd $(GLOG_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
-	cd $(GLOG_BUILD_DIR) && sudo $(MAKE) install
-
-.PHONY: libmodbus-dev
-libmodbus-dev: modbus-submodule
-	cd $(MODBUS_DIR) && \
-	autoreconf -f -i 2>/dev/null || autoreconf -i
-	@mkdir -p $(MODBUS_BUILD_DIR)
-	cd $(MODBUS_BUILD_DIR) && \
-	../configure \
-		--prefix=/usr/local \
-		--enable-shared \
-		--disable-static \
-		CFLAGS="-g -O0"
-	cd $(MODBUS_BUILD_DIR) && $(MAKE) -j$(shell nproc 2>/dev/null || echo 4)
-	cd $(MODBUS_BUILD_DIR) && sudo $(MAKE) install
 
 # Clean targets
 .PHONY: clean
@@ -217,6 +159,20 @@ gflags: gflags-submodule gflags-configure
 	cd $(GFLAGS_BUILD_DIR) && sudo $(MAKE) install
 	@echo "gflags installed successfully"
 
+#
+#DOC
+docg:
+	@if [ ! -f "testconfig.txt"]; then \
+		echo "generating config..."; \
+		doxygen -g testconfig.txt; \
+	fi
+
+doxy: docg
+	doxygen testconfig.txt
+
+doc: doxy
+	$(MAKE) -C doc
+
 # Help target
 .PHONY: help
 help:
@@ -247,4 +203,6 @@ help:
 	@echo ""
 	@echo "Utility targets:"
 	@echo "  check-deps       - Check for required build tools"
+	@echo "  doc              - generate documentation"
 	@echo "  help             - Show this help message"
+	
